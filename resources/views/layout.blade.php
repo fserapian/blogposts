@@ -17,6 +17,9 @@
 	<li>
 		<a href="{{ route('posts.index') }}">Blog Posts</a>
 	</li>
+    <li>
+        <a href="{{ route('posts.create') }}">Add new post</a>
+    </li>
 </ul>
 
 @yield('content')
