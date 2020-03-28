@@ -2,28 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Blog posts</title>
+    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+    <title>The Blog</title>
 </head>
 
 <body>
 
-<ul>
-	<li>
-		<a href="{{ route('home') }}">Home</a>
-	</li>
-	<li>
-		<a href="{{ route('contact') }}">Contact</a>
-	</li>
-	<li>
-		<a href="{{ route('posts.index') }}">Blog Posts</a>
-	</li>
-    <li>
-        <a href="{{ route('posts.create') }}">Add new post</a>
-    </li>
-</ul>
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+    <h5 class="my-0 mr-md-auto font-weight-normal">The Blog</h5>
+    <nav class="my-2 my-md-0 mr-md-3">
+        <a class="p-2 text-dark" href="{{route('home')}}">Home</a>
+        <a class="p-2 text-dark" href="{{route('contact')}}">Contact</a>
+        <a class="p-2 text-dark" href="{{route('posts.index')}}">Blog Posts</a>
+        <a class="p-2 text-dark" href="{{route('posts.create')}}">Add a post</a>
+    </nav>
+</div>
 
-@yield('content')
+@if (session()->has('status'))
+    <h4 style="background: greenyellow; color: black;">
+        {{session()->get('status')}}
+    </h4>
+@endif
 
+<div class="container">
+    @yield('content')
+</div>
+
+<script src="{{ mix('js/app.js') }}"></script>
 </body>
 
 </html>
