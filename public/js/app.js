@@ -19283,6 +19283,13 @@ module.exports = function(module) {
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
+var logoutLink = document.getElementById('logout');
+var logoutForm = document.getElementById('logout-form');
+logoutLink.addEventListener('click', function (e) {
+  e.preventDefault();
+  logoutForm.submit();
+});
+
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":

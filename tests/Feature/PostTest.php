@@ -39,4 +39,6 @@ class PostTest extends TestCase
             'content' => 'This post should go to sqlite database in memory',
         ]);
     }
+
+
 }

@@ -6,10 +6,17 @@ use App\BlogPost;
 use App\Http\Requests\StorePost;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
+//use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class PostController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')
+            ->only(['create', 'store', 'edit', 'update', 'destroy']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -17,8 +24,19 @@ class PostController extends Controller
      */
     public function index()
     {
-        // dd(BlogPost::all());
-        return view('posts.index', ['posts' => BlogPost::all()]);
+//        DB::connection()->enableQueryLog();
+//
+//        $posts = BlogPost::with('comments')->get();
+//
+//        foreach ($posts as $post) {
+//            foreach ($post->comments as $comment) {
+//                echo $comment->content . "\n ";
+//            }
+//        }
+//
+//        dd(DB::getQueryLog());
+
+        return view('posts.index', ['posts' => BlogPost::withCount('comments')->get()]);
     }
 
     /**
@@ -29,7 +47,7 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        return view('posts.show', ['post' => BlogPost::find($id)]);
+        return view('posts.show', ['post' => BlogPost::with('comments')->findOrFail($id)]);
     }
 
     public function create()
@@ -75,7 +93,8 @@ class PostController extends Controller
         return redirect()->route('posts.edit', ['post' => $post]);
     }
 
-    public function destroy(Request $request, $id) {
+    public function destroy(Request $request, $id)
+    {
         $post = BlogPost::findOrFail($id);
         $post->delete();
         $request->session()->flash('status', 'Post deleted');

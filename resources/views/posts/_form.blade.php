@@ -5,6 +5,6 @@
 
 <div class="form-group">
     <label for="content">Content</label>
-    <input type="text" id="content" name="content" value="{{old('content', $post->content ?? null)}}" class="form-control">
+    <input type="text" id="content" name="content" value="{{old('content', $post->content ?? null)}}"
+           class="form-control">
 </div>
-

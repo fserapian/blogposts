@@ -21,6 +21,12 @@
                     </td>
                 </tr>
             </table>
+
+            @if ($post->comments_count)
+                <p>{{$post->comments_count}} comments</p>
+            @else
+                <p>No comment at the moment</p>
+            @endif
      @empty
         <h1>No blog posts at the moment</h1>
 

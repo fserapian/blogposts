@@ -4,6 +4,6 @@
             <li>
                 {{$error}}
             </li>
-        @endfore ach
+        @endforeach
     </ul>
 @endif
