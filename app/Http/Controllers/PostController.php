@@ -3,11 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\BlogPost;
-use App\Http\Requests\StorePost;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\Request;
-//use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
+use App\Http\Requests\StorePost;
+//use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Contracts\View\Factory;
+
+/*
+    [
+        'show' => 'view',
+        'create' => 'create',
+        'store' => 'create',
+        'edit' => 'update'
+        'update' => 'update',
+        'destroy' => 'delete'
+    ]
+*/
 
 class PostController extends Controller
 {
@@ -24,17 +36,17 @@ class PostController extends Controller
      */
     public function index()
     {
-//        DB::connection()->enableQueryLog();
-//
-//        $posts = BlogPost::with('comments')->get();
-//
-//        foreach ($posts as $post) {
-//            foreach ($post->comments as $comment) {
-//                echo $comment->content . "\n ";
-//            }
-//        }
-//
-//        dd(DB::getQueryLog());
+        //        DB::connection()->enableQueryLog();
+        //
+        //        $posts = BlogPost::with('comments')->get();
+        //
+        //        foreach ($posts as $post) {
+        //            foreach ($post->comments as $comment) {
+        //                echo $comment->content . "\n ";
+        //            }
+        //        }
+        //
+        //        dd(DB::getQueryLog());
 
         return view('posts.index', ['posts' => BlogPost::withCount('comments')->get()]);
     }
@@ -52,6 +64,7 @@ class PostController extends Controller
 
     public function create()
     {
+        // $this->authorize('posts.create');
         return view('posts.create');
     }
 
@@ -59,13 +72,13 @@ class PostController extends Controller
     {
         $validatedData = $request->validated();
 
-//	    dd($validatedData);
-//
-//	    $blogPost = new BlogPost();
-//		$blogPost->title = $request->input('title');
-//		$blogPost->content = $request->input('content');
-//
-//		$blogPost->save();
+        //	    dd($validatedData);
+        //
+        //	    $blogPost = new BlogPost();
+        //		$blogPost->title = $request->input('title');
+        //		$blogPost->content = $request->input('content');
+        //
+        //		$blogPost->save();
 
         BlogPost::create($validatedData);
 
@@ -78,12 +91,21 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = BlogPost::findOrFail($id);
+        $this->authorize($post);
+
         return view('posts.edit', ['post' => $post]);
     }
 
     public function update(StorePost $request, $id)
     {
+
         $post = BlogPost::findOrFail($id);
+
+        // if (Gate::denies('update-post', $post)) {
+        //     abort(403, 'You cannot update this post');
+        // }
+        $this->authorize($post);
+
         $validatedData = $request->validated();
 
         $post->fill($validatedData);
@@ -96,6 +118,12 @@ class PostController extends Controller
     public function destroy(Request $request, $id)
     {
         $post = BlogPost::findOrFail($id);
+
+        // if (Gate::denies('delete-post', $post)) {
+        //     abort(403, 'You cannot delete this post');
+        // }
+        $this->authorize($post);
+
         $post->delete();
         $request->session()->flash('status', 'Post deleted');
         return redirect()->route('posts.index');

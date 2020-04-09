@@ -31,5 +31,6 @@ $factory->state(User::class, 'default-user', function (Faker $faker) {
     return [
         'name' => 'Fadi Serapian',
         'email' => 'fsn@gmail.com',
+        'is_admin' => true,
     ];
 });
