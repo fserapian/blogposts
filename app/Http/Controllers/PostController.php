@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\BlogPost;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
-use App\Http\Requests\StorePost;
 //use Illuminate\Support\Facades\DB;
+use App\Http\Requests\StorePost;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Contracts\View\Factory;
 
@@ -15,7 +16,7 @@ use Illuminate\Contracts\View\Factory;
         'show' => 'view',
         'create' => 'create',
         'store' => 'create',
-        'edit' => 'update'
+        'edit' => 'update' 
         'update' => 'update',
         'destroy' => 'delete'
     ]
@@ -48,7 +49,11 @@ class PostController extends Controller
         //
         //        dd(DB::getQueryLog());
 
-        return view('posts.index', ['posts' => BlogPost::withCount('comments')->get()]);
+        return view('posts.index', [
+            'posts' => BlogPost::latest()->withCount('comments')->get(),
+            'mostCommented' => BlogPost::mostCommented()->take(5)->get(),
+            'activeUsers' => User::withMostPosts()->take(5)->get()
+        ]);
     }
 
     /**
@@ -59,6 +64,10 @@ class PostController extends Controller
      */
     public function show($id)
     {
+        // return view('posts.show', ['post' => BlogPost::with(['comments' => function ($query) {
+        //     $query->latest();
+        // }])->findOrFail($id)]);
+
         return view('posts.show', ['post' => BlogPost::with('comments')->findOrFail($id)]);
     }
 
@@ -71,6 +80,7 @@ class PostController extends Controller
     public function store(StorePost $request)
     {
         $validatedData = $request->validated();
+        $validatedData['user_id'] = $request->user()->id;
 
         //	    dd($validatedData);
         //
