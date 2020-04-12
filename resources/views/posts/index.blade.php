@@ -7,8 +7,17 @@
     <div class="col-md-8">
 
         @forelse ($posts as $post)
-        <p><a href="{{ route('posts.show', ['post' => $post->id]) }}">{{ $post->title }}</a></p>
+        @if ($post->trashed())
+        <del>
+            @endif
+            <p><a href="{{ route('posts.show', ['post' => $post->id]) }}">{{ $post->title }}</a></p>
+            @if ($post->trashed())
+        </del>
+        @endif
         <small class="text-muted">Added {{ $post->created_at->diffForHumans() }} by {{ $post->user->name }}</small>
+
+        @updated(['date' => $post->created_at, 'name' => $post->user->name])
+        @endupdated
 
         @if ($post->comments_count)
         <p><small>{{ $post->comments_count }} comments</small></p>
@@ -22,6 +31,7 @@
         </a>
         @endcan
 
+        @if (!$post->trashed())
         @can('delete', $post)
         <form action="{{ route('posts.destroy', ['post' => $post->id]) }}" method="post" style="display: inline;">
             @csrf
@@ -29,6 +39,7 @@
             <input type="submit" value="Delete" class="btn btn-secondary btn-sm">
         </form>
         @endcan
+        @endif
         <hr>
 
         @empty
@@ -54,19 +65,26 @@
             </ul>
         </div>
 
-        <div class="card" style="width: 18rem;">
+        {{-- <div class="card" style="width: 18rem;">
             <div class="card-body">
                 <h5 class="card-title">Active Users</h5>
                 <p class="card-subtitle text-muted">Users with the most posts</p>
             </div>
             <ul class="list-group list-group-flush">
-                @foreach ($activeUsers as $user)
+                @foreach ($mostActive as $user)
                 <li class="list-group-item">
                     <span>{{ $user->name }}<span> <small>({{ $user->blog_posts_count }} posts)</small>
                 </li>
                 @endforeach
             </ul>
-        </div>
+        </div> --}}
+
+        @component('components.card', ['title' => 'Most Active'])
+            @slot('subtitle')
+                Users who are most active
+            @endslot
+            @slot('items', collect($mostActive)->pluck('name'))
+        @endcomponent
     </div>
 </div>
 

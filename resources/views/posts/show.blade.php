@@ -3,19 +3,28 @@
 @section('content')
 <h2>{{ $post->title }}</h2>
 <p>{{ $post->content }}</p>
-<small>Published {{ $post->created_at->diffForHumans() }}</small>
+{{-- <small>Published {{ $post->created_at->diffForHumans() }}</small> --}}
 
-@if ((new Carbon\Carbon())->diffInMinutes($post->created_at) < 10) <strong>New!</strong>
-    @endif
+    @component('components.badge', ['type'=> 'primary'], ['show' => now()->diffInMinutes($post->created_at) < 20])
+        New!
+    @endcomponent
+
+    @component('components.updated', ['date' => $post->created_at, 'name' => $post->user->name])
+    @endcomponent
+
     <hr>
 
-    <h2>Comments</h2>
-    @forelse ($post->comments as $comment)
-    <p>{{ $comment->content  }}</p>
-    <small class="text-muted">added {{ $comment->created_at->diffForHumans()  }}</small>
-    <hr>
-    @empty
-    <h3 class="text-muted">No comments for the moment...</h3>
-    @endforelse
+<h2>Comments</h2>
+@forelse ($post->comments as $comment)
+<p>{{ $comment->content  }}</p>
+{{-- <small class="text-muted">added {{ $comment->created_at->diffForHumans()  }}</small> --}}
 
-    @endsection
+    @component('components.updated', ['date' => $comment->created_at])
+        Updated
+    @endcomponent
+<hr>
+@empty
+<h3 class="text-muted">No comments for the moment...</h3>
+@endforelse
+
+@endsection
