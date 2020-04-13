@@ -12,6 +12,8 @@
     @component('components.updated', ['date' => $post->created_at, 'name' => $post->user->name])
     @endcomponent
 
+    <p>This post has {{ $counter }} views</p>
+
     <hr>
 
 <h2>Comments</h2>

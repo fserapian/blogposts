@@ -25,21 +25,25 @@
         <p><small>No comments here</small></p>
         @endif
 
-        @can('update', $post)
-        <a href="{{ route('posts.edit', ['post' => $post->id]) }}">
-            <button class="btn btn-info btn-sm">Edit</button>
-        </a>
-        @endcan
+        @auth
+            @can('update', $post)
+            <a href="{{ route('posts.edit', ['post' => $post->id]) }}">
+                <button class="btn btn-info btn-sm">Edit</button>
+            </a>
+            @endcan
+        @endauth
 
-        @if (!$post->trashed())
-        @can('delete', $post)
-        <form action="{{ route('posts.destroy', ['post' => $post->id]) }}" method="post" style="display: inline;">
-            @csrf
-            @method('delete')
-            <input type="submit" value="Delete" class="btn btn-secondary btn-sm">
-        </form>
-        @endcan
-        @endif
+        @auth
+            @if (!$post->trashed())
+                @can('delete', $post)
+                <form action="{{ route('posts.destroy', ['post' => $post->id]) }}" method="post" style="display: inline;">
+                    @csrf
+                    @method('delete')
+                    <input type="submit" value="Delete" class="btn btn-secondary btn-sm">
+                </form>
+                @endcan
+            @endif
+        @endauth
         <hr>
 
         @empty
@@ -85,6 +89,8 @@
             @endslot
             @slot('items', collect($mostActive)->pluck('name'))
         @endcomponent
+
+        
     </div>
 </div>
 

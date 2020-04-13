@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 //use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StorePost;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Contracts\View\Factory;
 
 /*
@@ -49,10 +50,19 @@ class PostController extends Controller
         //
         //        dd(DB::getQueryLog());
 
+        // Caching the data
+        $mostCommented = Cache::remember('most-commented-blog-post', 60, function () {
+            return BlogPost::mostCommented()->take(5)->get();
+        });
+
+        $mostActive = Cache::remember('most-active-users', 60, function () {
+            User::withMostPosts()->take(5)->get();
+        });
+
         return view('posts.index', [
-            'posts' => BlogPost::latest()->withCount('comments')->get(),
-            'mostCommented' => BlogPost::mostCommented()->take(5)->get(),
-            'mostActive' => User::withMostPosts()->take(5)->get()
+            'posts' => BlogPost::latest()->withCount('comments')->with('user')->get(),
+            'mostCommented' => $mostCommented,
+            'mostActive' => $mostActive,
         ]);
     }
 
@@ -68,7 +78,49 @@ class PostController extends Controller
         //     $query->latest();
         // }])->findOrFail($id)]);
 
-        return view('posts.show', ['post' => BlogPost::with('comments')->findOrFail($id)]);
+        $blogPost = Cache::remember("blog-post-{$id}", 10, function () use ($id) {
+            return BlogPost::with('comments')->findOrFail($id);
+        });
+
+        // Caching algorithms for visited users counter
+        $sessionId = session()->getId();
+        $counterKey = "blog-post-counter-{$id}";
+        $usersKey = "blog-post-{$id}-users";
+
+        $users = Cache::get($usersKey, []);
+        $usersUpdate = [];
+        $difference = 0;
+        $now = now();
+
+        foreach ($users as $session => $lastVisited) {
+            if ($now->diffInMinutes($lastVisited) >= 1) {
+                $difference--;
+            } else {
+                $usersUpdate[$session] = $lastVisited;
+            }
+        }
+
+        if (!array_key_exists($sessionId, $users) || $now->diffInMinutes($users[$sessionId]) >= 1) {
+            $difference++;
+        }
+
+        $usersUpdate[$sessionId] = $now;
+        Cache::forever($usersKey, $usersUpdate);
+
+        if (Cache::has($counterKey)) {
+            Cache::forever($counterKey, 1);
+        } else {
+            Cache::increment($counterKey, $difference);
+        }
+
+        $counter = Cache::get($counterKey);
+        return view(
+            'posts.show',
+            [
+                'post' => $blogPost,
+                'counter' => $counter,
+            ]
+        );
     }
 
     public function create()
