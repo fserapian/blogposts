@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 // @codingStandardsIgnoreLine
-class AddUserToBlogPostsTable extends Migration
+class AddUserToCommentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,9 +14,7 @@ class AddUserToBlogPostsTable extends Migration
      */
     public function up()
     {
-        Schema::table('blog_posts', function (Blueprint $table) {
-            //            $table->unsignedBigInteger('user_id')->nullable();
-
+        Schema::table('comments', function (Blueprint $table) {
             if (env('DB_CONNECTION') === 'sqlite_testing') {
                 $table->unsignedBigInteger('user_id')->default(0);
             } else {
@@ -34,7 +32,7 @@ class AddUserToBlogPostsTable extends Migration
      */
     public function down()
     {
-        Schema::table('blog_posts', function (Blueprint $table) {
+        Schema::table('comments', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
             $table->dropColumn('user_id');
         });

@@ -10,6 +10,7 @@ use Tests\TestCase;
 class PostTest extends TestCase
 {
     use RefreshDatabase;
+
     /**
      * A basic feature test example.
      *
@@ -22,7 +23,13 @@ class PostTest extends TestCase
         $response->assertSeeText('No blog posts at the moment');
     }
 
-    public function testThereIsOneBlogPost() {
+    /**
+     * A basic test
+     *
+     * @return void
+     */
+    public function testThereIsOneBlogPostWhenThereIsOneInDatabase()
+    {
         // Arrange
         $post = new BlogPost();
         $post->title = 'Sqlite Post';
@@ -39,6 +46,4 @@ class PostTest extends TestCase
             'content' => 'This post should go to sqlite database in memory',
         ]);
     }
-
-
 }

@@ -2,9 +2,7 @@
 
 @section('content')
 
-@include('posts._error-message')
-
-<div class="row">
+<div class="row mb-3">
     <div class="col-md-5 mx-auto">
         <form action="{{ route('posts.store') }}" method="post">
             @csrf
@@ -15,5 +13,8 @@
         </form>
     </div>
 </div>
+
+{{-- @include('posts._error-message') --}}
+@component('components.errors') @endcomponent
 
 @endsection

@@ -6,19 +6,19 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-	public function home()
-	{
-		//	    dd(Auth::user());
-		return view('home');
-	}
+    public function home()
+    {
+        //      dd(Auth::user());
+        return view('home');
+    }
 
-	public function contact()
-	{
-		return view('contact');
-	}
+    public function contact()
+    {
+        return view('contact');
+    }
 
-	public function secret()
-	{
-		return view('secret');
-	}
+    public function secret()
+    {
+        return view('secret');
+    }
 }

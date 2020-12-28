@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\User;
 use App\BlogPost;
 use App\Scopes\LatestScope;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +17,11 @@ class Comment extends Model
     public function blogPost()
     {
         return $this->belongsTo(BlogPost::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function scopeLatest(Builder $query)

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Tag;
 use App\User;
 use App\Comment;
 use App\Scopes\LatestScope;
@@ -28,6 +29,11 @@ class BlogPost extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class)->withTimestamps();
+    }
+
     public function scopeLatest(Builder $query)
     {
         return $query->orderBy(BlogPost::CREATED_AT, 'desc');
@@ -47,11 +53,12 @@ class BlogPost extends Model
 
         static::deleting(function (BlogPost $blogPost) {
             $blogPost->comments()->delete();
+            Cache::tags(['blog-post'])->forget("blog-post-{$blogPost->id}");
         });
 
         // Clear the cache when updating
         static::updating(function (BlogPost $blogPost) {
-            Cache::forget("blog-post-{$blogPost->id}");
+            Cache::tags(['blog-post'])->forget("blog-post-{$blogPost->id}");
         });
 
         static::restoring(function (BlogPost $blogPost) {

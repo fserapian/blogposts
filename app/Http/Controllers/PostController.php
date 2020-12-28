@@ -17,7 +17,7 @@ use Illuminate\Contracts\View\Factory;
         'show' => 'view',
         'create' => 'create',
         'store' => 'create',
-        'edit' => 'update' 
+        'edit' => 'update',
         'update' => 'update',
         'destroy' => 'delete'
     ]
@@ -50,19 +50,25 @@ class PostController extends Controller
         //
         //        dd(DB::getQueryLog());
 
-        // Caching the data
-        $mostCommented = Cache::remember('most-commented-blog-post', 60, function () {
-            return BlogPost::mostCommented()->take(5)->get();
-        });
+        // // Caching the data
+        // $mostCommented = Cache::remember('most-commented-blog-post', 60, function () {
+        //     return BlogPost::mostCommented()->take(5)->get();
+        // });
 
-        $mostActive = Cache::remember('most-active-users', 60, function () {
-            User::withMostPosts()->take(5)->get();
-        });
+        // $mostActive = Cache::remember('most-active-users', 60, function () {
+        //     User::withMostPosts()->take(5)->get();
+        // });
+
+        // $mostActiveLastMonth = Cache::remember('most-active-users-last-month', 60, function () {
+        //     User::withMostPostsLastMonth()->take(5)->get();
+        // });
 
         return view('posts.index', [
-            'posts' => BlogPost::latest()->withCount('comments')->with('user')->get(),
-            'mostCommented' => $mostCommented,
-            'mostActive' => $mostActive,
+            'posts' => BlogPost::latest()
+                ->withCount('comments')
+                ->with('user')
+                ->with('tags')
+                ->get(),
         ]);
     }
 
@@ -78,8 +84,8 @@ class PostController extends Controller
         //     $query->latest();
         // }])->findOrFail($id)]);
 
-        $blogPost = Cache::remember("blog-post-{$id}", 10, function () use ($id) {
-            return BlogPost::with('comments')->findOrFail($id);
+        $blogPost = Cache::remember("blog-post-{$id}", 60, function () use ($id) {
+            return BlogPost::with('comments')->with('tags')->with('user')->findOrFail($id);
         });
 
         // Caching algorithms for visited users counter
@@ -134,13 +140,13 @@ class PostController extends Controller
         $validatedData = $request->validated();
         $validatedData['user_id'] = $request->user()->id;
 
-        //	    dd($validatedData);
+        //      dd($validatedData);
         //
-        //	    $blogPost = new BlogPost();
-        //		$blogPost->title = $request->input('title');
-        //		$blogPost->content = $request->input('content');
+        //      $blogPost = new BlogPost();
+        //      $blogPost->title = $request->input('title');
+        //      $blogPost->content = $request->input('content');
         //
-        //		$blogPost->save();
+        //      $blogPost->save();
 
         BlogPost::create($validatedData);
 

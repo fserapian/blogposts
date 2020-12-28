@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Comment;
 use App\BlogPost;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
@@ -42,6 +43,11 @@ class User extends Authenticatable
     public function blogPosts()
     {
         return $this->hasMany(BlogPost::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 
     public function scopeWithMostPosts(Builder $query)

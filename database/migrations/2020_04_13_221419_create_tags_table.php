@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 // @codingStandardsIgnoreLine
-class CreateProfilesTable extends Migration
+class CreateTagsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,12 +14,10 @@ class CreateProfilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('profiles', function (Blueprint $table) {
+        Schema::create('tags', function (Blueprint $table) {
             $table->id();
+            $table->string('name', 40);
             $table->timestamps();
-
-            $table->unsignedInteger('author_id')->unique();
-            $table->foreign('author_id')->references('id')->on('authors');
         });
     }
 
@@ -30,6 +28,6 @@ class CreateProfilesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('profiles');
+        Schema::dropIfExists('tags');
     }
 }
