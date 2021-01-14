@@ -4,7 +4,6 @@ namespace App;
 
 use App\Tag;
 use App\User;
-use App\Comment;
 use App\Scopes\LatestScope;
 use App\Scopes\DeletedAdminScope;
 use Illuminate\Support\Facades\Cache;

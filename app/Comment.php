@@ -3,7 +3,6 @@
 namespace App;
 
 use App\User;
-use App\BlogPost;
 use App\Scopes\LatestScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;

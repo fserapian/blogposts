@@ -4,6 +4,7 @@ use App\Tag;
 use App\BlogPost;
 use Illuminate\Database\Seeder;
 
+// @codingStandardsIgnoreLine
 class BlogPostTagTableSeeder extends Seeder
 {
     /**

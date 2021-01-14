@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
+// @codingStandardsIgnoreLine
 class DatabaseSeeder extends Seeder
 {
     /**

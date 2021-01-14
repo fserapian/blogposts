@@ -63,13 +63,13 @@ class PostController extends Controller
         //     User::withMostPostsLastMonth()->take(5)->get();
         // });
 
-        return view('posts.index', [
-            'posts' => BlogPost::latest()
-                ->withCount('comments')
-                ->with('user')
-                ->with('tags')
-                ->get(),
-        ]);
+        $posts = BlogPost::latest()
+                    ->withCount('comments')
+                    ->with('user')
+                    ->with('tags')
+                    ->get();
+
+        return view('posts.index', ['posts' => $posts]);
     }
 
     /**

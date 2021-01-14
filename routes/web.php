@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
-Route::get('/secret', 'HomeController@secret')->name('secret')->middleware('can:home.secret');
+Route::get('/secret', 'HomeController@secret')
+    ->name('secret')
+    ->middleware('can:home.secret');
 
 Route::get('/', 'HomeController@home')->name('home');
 Route::get('/contact', 'HomeController@contact')->name('contact');

@@ -3,6 +3,7 @@
 use App\User;
 use Illuminate\Database\Seeder;
 
+// @codingStandardsIgnoreLine
 class UsersTableSeeder extends Seeder
 {
     /**

@@ -13,25 +13,24 @@ class HomeTest extends TestCase
      *
      * @return void
      */
-    public function testHomePageIsWorkingCorrectly(): void
+    public function testHomePageHasCorrectText()
     {
-        // $response = $this->get('/');
+        $response = $this->get('/');
 
-        // $response->assertSeeText('Welcome to blog posts');
-        // $response->assertSeeText('Welcome home...');
-
-        $this->assertTrue(10 === 10);
+        $response->assertSeeText('Welcome to blog posts');
+        $response->assertSeeText('Welcome home...');
     }
 
     /**
-     * Test Contact page is working correctlry
+     * A basic feature test example.
+     *
      * @return void
      */
-    // public function testContactPageIsWorkingCorrectly()
-    // {
-    //     $response = $this->get('contact');
+    public function testContactPageHasCorrectText()
+    {
+        $response = $this->get('/contact');
 
-    //     $response->assertSeeText('Contact Us');
-    //     $response->assertSeeText('This is the contact page');
-    // }
+        $response->assertSeeText('Contact Us');
+        $response->assertSeeText('This is the contact page');
+    }
 }

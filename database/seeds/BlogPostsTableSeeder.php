@@ -4,6 +4,7 @@ use App\User;
 use App\BlogPost;
 use Illuminate\Database\Seeder;
 
+// @codingStandardsIgnoreLine
 class BlogPostsTableSeeder extends Seeder
 {
     /**
