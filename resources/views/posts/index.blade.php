@@ -15,9 +15,9 @@
             @endif
             <small class="text-muted">Added {{ $post->created_at->diffForHumans() }} by {{ $post->user->name }}</small>
 
-            @component('components.updated', ['date' => $post->created_at, 'name' => $post->user->name])
+            <x-updated :date="$post->created_at" :name="$post->user->name">
                 Updated
-            @endcomponent
+            </x-updated>
 
             @component('components.tags', ['tags' => $post->tags])
             @endcomponent

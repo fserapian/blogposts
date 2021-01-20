@@ -6,9 +6,9 @@
     </div>
     <ul class="list-group list-group-flush">
         @foreach ($items as $item)
-        <li class="list-group-item">
-            {{ $item }}
-        </li>
+            <li class="list-group-item">
+                {{ $item }}
+            </li>
         @endforeach
     </ul>
 </div>

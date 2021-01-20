@@ -1,7 +1,7 @@
-@if (!isset($show) || $show)
-
-<div class="badge badge-{{ $type ?? 'success' }}">
-    {{ $slot }}
-</div>
-
-@endif
+{{-- @if ($show === true) --}}
+    <span class="badge badge-{{ $type ?? 'success' }}">
+        {{ $slot }}
+    </span>
+{{-- @else
+    <h2>Nope</h2>
+@endif --}}
