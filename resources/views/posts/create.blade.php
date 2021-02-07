@@ -14,7 +14,6 @@
     </div>
 </div>
 
-{{-- @include('posts._error-message') --}}
-@component('components.errors') @endcomponent
+<x-errors></x-errors>
 
 @endsection
