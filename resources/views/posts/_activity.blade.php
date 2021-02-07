@@ -2,7 +2,8 @@
     <div class="card-body">
         <h5 class="card-title">Most Commented</h5>
         <p class="card-subtitle text-muted">
-            What people are talking about</p>
+            What people are talking about
+        </p>
     </div>
     <ul class="list-group list-group-flush">
         @foreach ($mostCommented as $post)
@@ -13,7 +14,7 @@
     </ul>
 </div>
 
-{{-- <div class="card" style="width: 18rem;">
+<div class="card" style="width: 18rem;">
     <div class="card-body">
         <h5 class="card-title">Active Users</h5>
         <p class="card-subtitle text-muted">Users with the most posts</p>
@@ -25,14 +26,14 @@
             </li>
         @endforeach
     </ul>
-</div> --}}
+</div>
 
-@component('components.card', ['title' => 'Most Active'])
+{{-- @component('components.card', ['title' => 'Most Active'])
     @slot('subtitle')
         Users who are most active
     @endslot
     @slot('items', collect($mostActive)->pluck('name'))
-@endcomponent
+@endcomponent --}}
 
 {{-- <div class="card mb-3" style="width: 18rem;">
     <div class="card-body">

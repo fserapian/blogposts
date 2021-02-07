@@ -64,12 +64,14 @@ class PostController extends Controller
         // });
 
         $posts = BlogPost::latest()
-                    ->withCount('comments')
-                    ->with('user')
-                    ->with('tags')
-                    ->get();
+            ->withCount('comments')
+            ->with('user')
+            ->with('tags')
+            ->get();
 
-        return view('posts.index', ['posts' => $posts]);
+        return view('posts.index', [
+            'posts' => $posts,
+        ]);
     }
 
     /**
@@ -120,6 +122,7 @@ class PostController extends Controller
         }
 
         $counter = Cache::get($counterKey);
+
         return view(
             'posts.show',
             [
