@@ -4,6 +4,7 @@ namespace App;
 
 use App\User;
 use App\Scopes\LatestScope;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,6 +12,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Comment extends Model
 {
     use SoftDeletes;
+
+    protected $fillable = [
+        'content',
+        'user_id',
+    ];
 
     // Laravel will look for blog_post_id
     public function blogPost()
@@ -33,5 +39,9 @@ class Comment extends Model
         parent::boot();
 
         // static::addGlobalScope(new LatestScope());
+
+        // static::creating(function (Comment $comment) {
+        //     Cache::tags(['blog-post'])->forget("blog-post-{$comment->blog_post_id}");
+        // });
     }
 }

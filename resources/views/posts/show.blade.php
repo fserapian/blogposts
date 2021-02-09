@@ -25,12 +25,19 @@
             <hr>
 
             @auth
-                <form action="#">
+                <form action="{{ route('posts.comments.store', ['post' => $post]) }}" method="post">
+                    @csrf
                     @include('comments._form')
                 </form>
             @else
                 <a href="{{ route('login') }}">Login</a> to add comments
             @endauth
+
+            @if (session('success'))
+                <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
+            
+            <x-errors></x-errors>
             
             <h2>Comments</h2>
 

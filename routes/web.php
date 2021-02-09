@@ -23,6 +23,9 @@ Route::get('/contact', 'HomeController@contact')->name('contact');
 
 Route::resource('posts', 'PostController');
 
+Route::post('/posts/{post}/comments', 'PostCommentController@store')
+    ->name('posts.comments.store');
+
 Route::get('/posts/tag/{tag}', 'PostTagController@index')->name('posts.tags.index');
 
 Auth::routes();
